@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% if token %}
+<script>
+  localStorage.setItem("token", "{{token}}")
+</script>
+{% endif %}
+
+<div id="react-app"></div>
+{% endblock %}
