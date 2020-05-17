@@ -5,14 +5,14 @@ import { hot } from 'react-hot-loader/root';
 import Home from './pages/Home';
 import SentryBoundary from './utils/SentryBoundary';
 
-const App = ({ store }) => (
+const Root = ({ store }) => (
   <SentryBoundary>
     <Home store={store} />
   </SentryBoundary>
 );
 
-App.propTypes = {
+Root.propTypes = {
   store: PropTypes.object,
 };
 
-export default hot(App);
+export default hot(Root);

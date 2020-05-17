@@ -1,0 +1,44 @@
+.search-container {
+  padding: 25px 20%;
+}
+
+.title {
+  color: '#485461';
+}
+
+.list-container {
+  padding: 0 10%;
+}
+
+.table-fix {
+  table-layout: fixed;
+}
+
+.author-col {
+  width: 200px;
+
+}
+
+.author-row {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.commit-col {
+  width: 87px;
+}
+
+.repo-col {
+  width: 200px!important;
+}
+
+.date-col {
+  width: 122px;
+}
+
+.message-col {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
