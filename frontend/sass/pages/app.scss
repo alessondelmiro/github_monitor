@@ -1,17 +1,26 @@
 .search-container {
   padding: 25px 20%;
+  @media (max-width: '880px') {
+    padding: 25px 20px;
+  }
 }
 
 .title {
-  color: '#485461';
+  color: #485461;
 }
 
 .list-container {
   padding: 0 10%;
+  @media (max-width: '880px') {
+    padding: 0 10px;
+  }
 }
 
 .table-fix {
   table-layout: fixed;
+  @media (max-width: '880px') {
+    table-layout: auto;
+  }
 }
 
 .author-col {
@@ -41,4 +50,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media (max-width: '880px') {
+    max-width: 300px;
+  }
 }
