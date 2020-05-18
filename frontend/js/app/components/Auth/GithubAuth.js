@@ -6,7 +6,7 @@ const GithubAuth = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     window.location.replace(
-      `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_GITHUB_CLIENT_ID}&scope=read:user,user:email,repo,admin:repo_hook`
+      `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&scope=read:user,user:email,repo,admin:repo_hook`
     );
   };
 
