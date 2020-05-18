@@ -1,7 +1,8 @@
 const autoprefixer = require('autoprefixer');
+const Dotenv = require('dotenv-webpack');
+const path = require('path');
 const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
-const path = require('path');
 
 const baseConfig = require('./webpack.base.config');
 
@@ -41,6 +42,7 @@ baseConfig.module.rules.push(
 );
 
 baseConfig.plugins = [
+  new Dotenv(),
   new webpack.EvalSourceMapDevToolPlugin({
     exclude: /node_modules/,
   }),
