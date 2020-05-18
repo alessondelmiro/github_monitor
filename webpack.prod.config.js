@@ -48,7 +48,7 @@ baseConfig.plugins = [
     // removes React warnings
     'process.env': {
       NODE_ENV: JSON.stringify('production'),
-      GITHUB_CLIENT_ID: '75ac3e0675f6b96755c8',
+      GITHUB_CLIENT_ID: JSON.stringify('75ac3e0675f6b96755c8'),
     },
   }),
   new MiniCssExtractPlugin({ filename: '[name]-[hash].css', disable: false, allChunks: true }),
