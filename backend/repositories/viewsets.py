@@ -26,7 +26,4 @@ class CommitViewSet(ModelViewSet):
     filter_fields = ['repository', 'repository__id']
 
     def get_queryset(self):
-        return Commit.objects.all().filter(repository__user=self.request.user)
-
-    # def create(self, request, *args, **kwargs):
-    #     return create_commit(request)
+        return Commit.objects.all().filter(repository__user=self.request.user).order_by('-created')

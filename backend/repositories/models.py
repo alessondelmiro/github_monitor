@@ -1,6 +1,5 @@
 from django.db import models
 from users.models import User
-from .querysets import CommitQuerySet
 from datetime import datetime
 from django.contrib.postgres.fields import JSONField
 
@@ -31,4 +30,3 @@ class Commit (models.Model):
     created = models.DateTimeField(default=datetime.now, blank=True)
     author = JSONField()
     message = models.TextField(blank=True)
-    objects = models.Manager.from_queryset(CommitQuerySet)()
