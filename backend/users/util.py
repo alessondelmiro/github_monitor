@@ -71,15 +71,12 @@ def verify_token(req):
                     'Authorization': f'token {token}',
                 },
             )
-            print(token)
-            print(request)
             if request.status_code == http.HTTPStatus.OK:
                 json_data = json.loads(request.text)
                 user = User.objects.get(github_id=json_data['id'])
                 user.email = json_data['email']
                 user.username = json_data['login']
                 user.avatar = json_data['avatar_url']
-                user.github_token = token
                 user.save()
                 return HttpResponse(status=204)
         except User.DoesNotExist:

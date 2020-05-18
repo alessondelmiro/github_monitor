@@ -12,7 +12,7 @@ urlpatterns = [
 
     path("admin/", admin.site.urls, name="admin"),
 
-    # path('api/', include('repositories.urls')),
+    path('api/', include('repositories.urls')),
     path('api/', include('users.urls')),
     path("jsreverse/", django_js_reverse.views.urls_js, name="js_reverse"),
 ]

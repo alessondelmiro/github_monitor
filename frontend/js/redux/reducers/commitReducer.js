@@ -1,34 +1,32 @@
-/* eslint-disable default-param-last */
-/* eslint-disable no-fallthrough */
-import { AUTH_CHECKING, AUTH_FAIL, AUTH_SUCCESS } from '../types';
+import { GET_COMMITS_PROGRESS, GET_COMMITS_SUCCESS, GET_COMMITS_FAIL } from '../types';
 
 const initialState = {
+  commits: [],
   loading: false,
-  authenticated: false,
   error: null,
 };
 
+// eslint-disable-next-line default-param-last
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case AUTH_CHECKING:
+    case GET_COMMITS_PROGRESS:
       return {
         loading: true,
         error: null,
-        authenticated: false,
+        commits: [],
       };
-    case AUTH_SUCCESS:
+    case GET_COMMITS_SUCCESS:
       return {
         loading: false,
         error: null,
-        authenticated: true,
+        commits: action.commits,
       };
-    case AUTH_FAIL:
+    case GET_COMMITS_FAIL:
       return {
         loading: false,
         error: action.error,
-        authenticated: false,
+        commits: [],
       };
-
     default:
       return state;
   }

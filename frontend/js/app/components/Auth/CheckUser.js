@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import actions from '../../../redux/actions';
 
-const CheckUser = ({ authenticated, checkUser, token }) => {
+const CheckUser = ({ checkUser, token }) => {
   const logout = () => {
     localStorage.clear();
     window.location.replace('/login');
@@ -12,12 +12,15 @@ const CheckUser = ({ authenticated, checkUser, token }) => {
 
   useEffect(() => {
     if (token !== null) {
-      checkUser(token);
-      if (!authenticated) {
-        logout();
-      }
+      checkUser(token).then((result) => {
+        if (!result) {
+          logout();
+        }
+        return null;
+      });
     }
   }, [token]);
+
   return (
     <>
       <h5 className="card-title text-center">Checking your credentials...</h5>
@@ -31,7 +34,6 @@ const CheckUser = ({ authenticated, checkUser, token }) => {
 };
 
 CheckUser.propTypes = {
-  authenticated: PropTypes.bool,
   checkUser: PropTypes.func,
   token: PropTypes.string,
 };
@@ -41,7 +43,6 @@ const mapStateToProps = (state) => {
     error: state.auth.error,
     loading: state.auth.loading,
     authenticated: state.auth.authenticated,
-    token: state.auth.token,
   };
 };
 

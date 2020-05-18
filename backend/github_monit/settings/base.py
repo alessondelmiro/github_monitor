@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_js_reverse",
+    # "django_filters",
     "rest_framework",
     "rest_framework.authtoken",
     "webpack_loader",
@@ -55,7 +56,10 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'users.authentication.GithubTokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'repositories.permissions.CheckPermission',
     ),
 }
 

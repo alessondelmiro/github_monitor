@@ -1,7 +1,18 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const AddRepo = ({ error, success, submitForm, text, title, setText, placeholder }) => {
+  function setNull() {
+    error = null;
+    success = null;
+  }
+
+  useEffect(() => {
+    if (error || success) {
+      setTimeout(setNull, 3000);
+    }
+  }, [error, success]);
+
   return (
     <div className="search-container">
       <div>
@@ -17,14 +28,17 @@ const AddRepo = ({ error, success, submitForm, text, title, setText, placeholder
               type="text"
               onChange={(e) => setText(e.target.value)}
             />
+            <button className="btn btn-success submit" type="submit">
+              Add
+            </button>
           </div>
           {error ? (
-            <div className="col-sm-4">
+            <div className="col-sm-6">
               <small className="text-danger">{error}</small>
             </div>
           ) : null}
           {success ? (
-            <div className="col-sm-4">
+            <div className="col-sm-6">
               <small className="text-success">{success}</small>
             </div>
           ) : null}

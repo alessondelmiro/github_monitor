@@ -2,34 +2,37 @@ import axios from 'axios';
 
 import { AUTH_CHECKING, AUTH_FAIL, AUTH_SUCCESS } from '../types';
 
-const authenticate = (token) => (dispatch) => {
-  dispatch({ type: AUTH_SUCCESS, token, authenticated: true });
-};
+async function setToken(token) {
+  axios.defaults.headers.common.Authorization = `Token ${token}`;
+}
 
-const checkUser = (token) => (dispatch) => {
-  dispatch({ type: AUTH_CHECKING });
-  axios
-    .get(`/api/verify?token=${token}`)
-    .then((response) => {
-      if (response.status === 204) {
-        dispatch({ type: AUTH_SUCCESS, token });
-      } else {
+const checkUser = (token) => {
+  return async (dispatch) => {
+    if (token) {
+      dispatch({ type: AUTH_CHECKING });
+      try {
+        const response = await axios.get(`/api/verify?token=${token}`);
+        if (response.status === 204) {
+          await setToken(token);
+          dispatch({ type: AUTH_SUCCESS });
+          return true;
+        }
         dispatch({
           type: AUTH_FAIL,
           error: {
-            message: 'User not validated.',
+            message: 'User not valid.',
           },
         });
+        return false;
+      } catch (error) {
+        dispatch({ type: AUTH_FAIL, error });
       }
-      return null;
-    })
-    .catch((error) => {
-      dispatch({ type: AUTH_FAIL, error });
-    });
+    }
+    return false;
+  };
 };
 
 const authActions = {
-  authenticate,
   checkUser,
 };
 

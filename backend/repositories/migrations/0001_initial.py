@@ -21,7 +21,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('github_id', models.IntegerField(unique=True)),
-                ('github_hook_id', models.IntegerField(null=True, unique=True)),
                 ('name', models.CharField(max_length=255)),
                 ('description', models.CharField(max_length=255, null=True)),
                 ('url', models.CharField(max_length=255)),

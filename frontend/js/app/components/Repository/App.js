@@ -1,52 +1,85 @@
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 
+import actions from '../../../redux/actions';
 import Header from '../Common/Header';
 
 import AddRepo from './AddRepo';
 import CommitList from './CommitList';
 
-const App = () => {
+const App = ({
+  createRepo,
+  getCommits,
+  commits,
+  repository,
+  error,
+  success,
+  loadingCommits,
+  hasRepos,
+  checkRepos,
+}) => {
   const [text, setText] = useState('');
-  const noRepos = false;
   const submitForm = (e) => {
     e.preventDefault();
+    createRepo(text);
   };
-  const commits = [
-    {
-      id: 1234,
-      author: 'Alesson Delmiro',
-      commit: '5632553',
-      message:
-        'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
-      date: 'Nov 29, 2020',
-      repository: {
-        id: 123,
-        name: 'github_monitor',
-      },
-    },
-  ];
+
+  useEffect(() => {
+    checkRepos();
+    getCommits();
+  }, []);
+
+  useEffect(() => {
+    getCommits();
+    console.log('repository', repository);
+  }, [repository]);
 
   return (
     <div>
       <Header />
       <AddRepo
-        // error="BLA BLE"
-        placeholder="<username>/<repo_name>"
+        error={error}
+        placeholder="<username>/<repo_name> ↵"
         setText={setText}
         submitForm={submitForm}
-        // success="BLA BLE"
+        success={success}
         text={text}
         title="Add a new repository"
       />
-      {noRepos ? (
+      {hasRepos ? (
+        <CommitList commits={commits} detail={false} loading={loadingCommits} />
+      ) : (
         <div className="search-container d-flex justify-content-center">
           <h4 className="title">Add your first repository</h4>
         </div>
-      ) : (
-        <CommitList commits={commits} detail={false} />
       )}
     </div>
   );
 };
 
-export default App;
+App.propTypes = {
+  createRepo: PropTypes.func,
+  commits: PropTypes.array,
+  getCommits: PropTypes.func,
+  repository: PropTypes.object,
+  error: PropTypes.string,
+  success: PropTypes.string,
+  loadingCommits: PropTypes.bool,
+  hasRepos: PropTypes.bool,
+  checkRepos: PropTypes.func,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    error: state.repo.error,
+    loading: state.repo.loading,
+    repository: state.repo.repository,
+    success: state.repo.success,
+    hasRepos: state.repo.hasRepos,
+    commits: state.commit.commits,
+    loadingCommits: state.commit.loading,
+  };
+};
+
+export default connect(mapStateToProps, actions)(App);

@@ -1,6 +1,6 @@
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const CommitList = ({ detail, commits }) => {
   return (
@@ -8,37 +8,35 @@ const CommitList = ({ detail, commits }) => {
       {commits && commits.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-fix">
-            <thead className="thead-light">
-              <th className="author-col" scope="col">
-                Author
-              </th>
-              <th className="commit-col" scope="col">
-                Commit
-              </th>
-              <th scope="col">Message</th>
-              {detail ? null : (
-                <th className="repo-col" scope="col">
-                  Repository
+            <thead>
+              <tr>
+                <th className="author-col" scope="col">
+                  Author
                 </th>
-              )}
-              <th className="date-col" scope="col">
-                Date
-              </th>
+                <th className="commit-col" scope="col">
+                  Commit
+                </th>
+                <th scope="col">Message</th>
+                {detail ? null : (
+                  <th className="repo-col" scope="col">
+                    Repository
+                  </th>
+                )}
+                <th className="date-col" scope="col">
+                  Date
+                </th>
+              </tr>
             </thead>
             <tbody>
               {commits.map((commit) => (
-                <tr key={commit.id}>
+                <tr key={commit.sha.slice(0, 6)}>
                   <th className="author-row" scope="row">
-                    {commit.author}
+                    {commit.author.name}
                   </th>
-                  <td>{commit.commit}</td>
+                  <td>{commit.sha.slice(0, 6)}</td>
                   <td className="message-col">{commit.message}</td>
-                  {detail ? null : (
-                    <Link to={`/repository/${commit.repository.id}`}>
-                      <td>{commit.repository.name}</td>
-                    </Link>
-                  )}
-                  <td>{commit.date}</td>
+                  {detail ? null : <td>{commit.repository_name}</td>}
+                  <td>{moment(commit.created).format('ll')}</td>
                 </tr>
               ))}
             </tbody>

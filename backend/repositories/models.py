@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from .querysets import CommitQuerySet
 from datetime import datetime
 from django.contrib.postgres.fields import JSONField
 
@@ -8,10 +9,16 @@ class Repository(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     github_id = models.IntegerField(unique=True)
-    github_hook_id = models.IntegerField(unique=True, null=True)
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255, null=True)
     url = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = ('name', 'user',)
+
+    @property
+    def full_name(self):
+        return f'{self.user.username}/{self.name}'
 
     def __str__(self):
         return self.name
@@ -24,3 +31,4 @@ class Commit (models.Model):
     created = models.DateTimeField(default=datetime.now, blank=True)
     author = JSONField()
     message = models.TextField(blank=True)
+    objects = models.Manager.from_queryset(CommitQuerySet)()
