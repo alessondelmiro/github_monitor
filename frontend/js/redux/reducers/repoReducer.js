@@ -12,6 +12,7 @@ const initialState = {
   repository: null,
   success: null,
   hasRepos: false,
+  alertMsg: null,
 };
 
 // eslint-disable-next-line default-param-last
@@ -19,11 +20,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_REPO_PROGRESS:
       return {
+        ...state,
         loading: true,
-        error: null,
-        repository: null,
-        success: null,
-        hasRepos: true,
       };
     case CREATE_REPO_SUCCESS:
       return {
@@ -31,6 +29,7 @@ const reducer = (state = initialState, action) => {
         error: null,
         repository: action.repository,
         success: action.success,
+        alertMsg: action.alertMsg,
         hasRepos: true,
       };
     case CREATE_REPO_FAIL:
@@ -39,16 +38,17 @@ const reducer = (state = initialState, action) => {
         error: action.error,
         repository: null,
         success: null,
+        alertMsg: action.alertMsg,
         hasRepos: true,
       };
     case HAS_REPOS:
       return {
-        ...initialState,
+        ...state,
         hasRepos: true,
       };
     case NO_REPOS:
       return {
-        ...initialState,
+        ...state,
         hasRepos: false,
       };
     default:

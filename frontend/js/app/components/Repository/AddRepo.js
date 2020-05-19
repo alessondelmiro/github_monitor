@@ -2,9 +2,10 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
 
-const AddRepo = ({ error, success, submitForm, text, title, setText, placeholder }) => {
+const AddRepo = ({ error, success, alertMsg, submitForm, text, title, setText, placeholder }) => {
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -19,7 +20,13 @@ const AddRepo = ({ error, success, submitForm, text, title, setText, placeholder
         setShowSuccess(false);
       }, 3000);
     }
-  }, [error, success]);
+    if (alertMsg) {
+      setShowAlert(true);
+      setTimeout(function successAlert() {
+        setShowAlert(false);
+      }, 3000);
+    }
+  }, [error, success, alertMsg]);
 
   return (
     <div className="search-container">
@@ -28,6 +35,9 @@ const AddRepo = ({ error, success, submitForm, text, title, setText, placeholder
       </Alert>
       <Alert key="success-alert" show={showSuccess} variant="success">
         {success ? success.detail : ''}
+      </Alert>
+      <Alert key="alert-alert" show={showAlert} variant="warning">
+        {alertMsg ? alertMsg.detail : ''}
       </Alert>
       <div>
         <h4 className="title">{title}</h4>
@@ -53,6 +63,7 @@ const AddRepo = ({ error, success, submitForm, text, title, setText, placeholder
 AddRepo.propTypes = {
   error: PropTypes.object,
   success: PropTypes.object,
+  alertMsg: PropTypes.object,
   submitForm: PropTypes.func,
   text: PropTypes.string,
   title: PropTypes.string,

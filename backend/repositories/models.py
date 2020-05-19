@@ -19,6 +19,10 @@ class Repository(models.Model):
     def full_name(self):
         return f'{self.user.username}/{self.name}'
 
+    @property
+    def commit_count(self):
+        return Commit.objects.filter(repository=self).count()
+
     def __str__(self):
         return self.name
 

@@ -23,7 +23,9 @@ class RepositoryViewSet(ModelViewSet):
 class CommitViewSet(ModelViewSet):
     serializer_class = CommitSerializer
     permission_classes = (CreatePermission,)
-    filter_fields = ['repository', 'repository__id']
 
     def get_queryset(self):
+        repository_id = self.request.query_params.get('repository__id', None)
+        if repository_id is not None:
+            return Commit.objects.all().filter(repository__user=self.request.user, repository__id=repository_id).order_by('-created')
         return Commit.objects.all().filter(repository__user=self.request.user).order_by('-created')

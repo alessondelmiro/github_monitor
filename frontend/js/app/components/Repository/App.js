@@ -15,6 +15,8 @@ const App = ({
   repository,
   error,
   success,
+  alertMsg,
+  loading,
   loadingCommits,
   hasRepos,
   checkRepos,
@@ -39,6 +41,7 @@ const App = ({
     <div>
       <Header />
       <AddRepo
+        alertMsg={alertMsg}
         error={error}
         placeholder="<username>/<repo_name> ↵"
         setText={setText}
@@ -47,7 +50,13 @@ const App = ({
         text={text}
         title="Add a new repository"
       />
-      {hasRepos ? (
+      {loading ? (
+        <div className="centered fit-width">
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      ) : hasRepos ? (
         <CommitList commits={commits} detail={false} loading={loadingCommits} />
       ) : (
         <div className="search-container d-flex justify-content-center">
@@ -65,6 +74,8 @@ App.propTypes = {
   repository: PropTypes.object,
   error: PropTypes.object,
   success: PropTypes.object,
+  alertMsg: PropTypes.object,
+  loading: PropTypes.bool,
   loadingCommits: PropTypes.bool,
   hasRepos: PropTypes.bool,
   checkRepos: PropTypes.func,
@@ -73,6 +84,7 @@ App.propTypes = {
 const mapStateToProps = (state) => {
   return {
     error: state.repo.error,
+    alertMsg: state.repo.alertMsg,
     loading: state.repo.loading,
     repository: state.repo.repository,
     success: state.repo.success,

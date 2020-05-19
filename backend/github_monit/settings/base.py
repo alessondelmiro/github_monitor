@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_js_reverse",
-    # "django_filters",
     "rest_framework",
     "rest_framework.authtoken",
     "webpack_loader",

@@ -7,7 +7,6 @@ class CheckPermission(BasePermission):
     def has_permission(self, request, view):
         if IsAuthenticated.has_permission(self, request, view):
             return True
-        print('test')
 
         raise Http404
 

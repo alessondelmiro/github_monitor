@@ -24,10 +24,18 @@ const createRepo = (name) => (dispatch) => {
     })
     .then((response) => {
       if (response.status === 201) {
+        let alertMsg = null;
+        if (response.data.commit_count === 0) {
+          alertMsg = {
+            detail: `Repository ${response.data.name} doesn't have any commits in the last 30 days.`,
+            created: moment(),
+          };
+        }
         dispatch({
           type: CREATE_REPO_SUCCESS,
           repository: response.data,
-          success: { detail: 'Repository added, retrieving commits...', created: moment() },
+          alertMsg,
+          success: { detail: `Repository ${response.data.name} added`, created: moment() },
         });
       }
       return null;
