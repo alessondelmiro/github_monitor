@@ -1,11 +1,18 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap/';
 
-const CommitList = ({ detail, commits }) => {
+const CommitList = ({ detail, commits, loading }) => {
   return (
     <div className="list-container">
-      {commits && commits.length > 0 ? (
+      {loading ? (
+        <div className="centered fit-width">
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      ) : commits && commits.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-fix">
             <thead>
@@ -34,7 +41,14 @@ const CommitList = ({ detail, commits }) => {
                     {commit.author.name}
                   </th>
                   <td>{commit.sha.slice(0, 6)}</td>
-                  <td className="message-col">{commit.message}</td>
+                  <td className="message-col">
+                    <OverlayTrigger
+                      key={commit.message}
+                      overlay={<Tooltip id={`tooltip-${commit.message}`}>{commit.message}</Tooltip>}
+                    >
+                      <span>{commit.message}</span>
+                    </OverlayTrigger>
+                  </td>
                   {detail ? null : <td>{commit.repository_name}</td>}
                   <td>{moment(commit.created).format('ll')}</td>
                 </tr>
@@ -55,6 +69,7 @@ const CommitList = ({ detail, commits }) => {
 CommitList.propTypes = {
   detail: PropTypes.bool,
   commits: PropTypes.array,
+  loading: PropTypes.bool,
 };
 
 export default CommitList;

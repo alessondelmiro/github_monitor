@@ -20,6 +20,10 @@
   margin-left: 1rem;
 }
 
+thead th {
+  font-weight: 900;
+}
+
 .table-fix {
   table-layout: fixed;
   @media (max-width: '880px') {
@@ -28,7 +32,7 @@
 }
 
 .author-col {
-  width: 200px;
+  width: 196px;
 
 }
 
@@ -47,7 +51,7 @@
 }
 
 .date-col {
-  width: 122px;
+  width: 126px;
 }
 
 .message-col {

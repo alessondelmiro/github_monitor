@@ -1,11 +1,17 @@
-import { CREATE_REPO_PROGRESS, CREATE_REPO_SUCCESS, CREATE_REPO_FAIL, NO_REPOS } from '../types';
+import {
+  CREATE_REPO_PROGRESS,
+  CREATE_REPO_SUCCESS,
+  CREATE_REPO_FAIL,
+  HAS_REPOS,
+  NO_REPOS,
+} from '../types';
 
 const initialState = {
   loading: false,
   error: null,
   repository: null,
   success: null,
-  hasRepos: true,
+  hasRepos: false,
 };
 
 // eslint-disable-next-line default-param-last
@@ -35,8 +41,14 @@ const reducer = (state = initialState, action) => {
         success: null,
         hasRepos: true,
       };
+    case HAS_REPOS:
+      return {
+        ...initialState,
+        hasRepos: true,
+      };
     case NO_REPOS:
       return {
+        ...initialState,
         hasRepos: false,
       };
     default:

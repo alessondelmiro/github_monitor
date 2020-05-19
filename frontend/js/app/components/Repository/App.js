@@ -31,8 +31,8 @@ const App = ({
   }, []);
 
   useEffect(() => {
+    checkRepos();
     getCommits();
-    console.log('repository', repository);
   }, [repository]);
 
   return (
@@ -63,8 +63,8 @@ App.propTypes = {
   commits: PropTypes.array,
   getCommits: PropTypes.func,
   repository: PropTypes.object,
-  error: PropTypes.string,
-  success: PropTypes.string,
+  error: PropTypes.object,
+  success: PropTypes.object,
   loadingCommits: PropTypes.bool,
   hasRepos: PropTypes.bool,
   checkRepos: PropTypes.func,
