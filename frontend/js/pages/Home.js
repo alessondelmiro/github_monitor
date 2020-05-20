@@ -1,26 +1,28 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect, Provider } from 'react-redux';
-import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom';
+import { HashRouter, Switch, Redirect, Route } from 'react-router-dom';
 
 import Auth from '../app/components/Auth/Auth';
 import App from '../app/components/Repository/App';
+import RepoDetail from '../app/components/Repository/RepoDetail';
 
 const Home = ({ authenticated, store }) => {
   if (authenticated) {
     return (
       <Provider store={store}>
-        <BrowserRouter>
+        <HashRouter>
           <Switch>
             <Redirect from="/login" to="/" />
             <Route component={App} exact path="/" />
+            <Route component={RepoDetail} path="/repositories/:id" />
           </Switch>
-        </BrowserRouter>
+        </HashRouter>
       </Provider>
     );
   }
 
-  window.history.pushState({ urlPath: '/login' }, '', '/login');
+  // window.history.pushState({ urlPath: '/#/login' }, '/#', '/#/login');
   return (
     <Provider store={store}>
       <Auth />

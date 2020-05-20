@@ -7,7 +7,7 @@ import actions from '../../../redux/actions';
 const CheckUser = ({ checkUser, token }) => {
   const logout = () => {
     localStorage.clear();
-    window.location.replace('/login');
+    window.location.replace('/#/login');
   };
 
   useEffect(() => {

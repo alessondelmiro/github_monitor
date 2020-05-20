@@ -1,19 +1,13 @@
 import axios from 'axios';
 import moment from 'moment';
 
-import {
-  CREATE_REPO_PROGRESS,
-  CREATE_REPO_SUCCESS,
-  CREATE_REPO_FAIL,
-  HAS_REPOS,
-  NO_REPOS,
-} from '../types';
+import { REPO_PROGRESS, REPO_SUCCESS, REPO_FAIL, HAS_REPOS, NO_REPOS } from '../types';
 
 const createRepo = (name) => (dispatch) => {
-  dispatch({ type: CREATE_REPO_PROGRESS });
+  dispatch({ type: REPO_PROGRESS });
   if (!name.includes('/')) {
     dispatch({
-      type: CREATE_REPO_FAIL,
+      type: REPO_FAIL,
       error: { detail: 'Wrong format. Example: username/repo_name', created: moment() },
     });
     return null;
@@ -32,7 +26,7 @@ const createRepo = (name) => (dispatch) => {
           };
         }
         dispatch({
-          type: CREATE_REPO_SUCCESS,
+          type: REPO_SUCCESS,
           repository: response.data,
           alertMsg,
           success: { detail: `Repository ${response.data.name} added`, created: moment() },
@@ -41,7 +35,7 @@ const createRepo = (name) => (dispatch) => {
       return null;
     })
     .catch((error) => {
-      dispatch({ type: CREATE_REPO_FAIL, error: error.response.data });
+      dispatch({ type: REPO_FAIL, error: error.response.data });
     });
   return null;
 };
@@ -61,9 +55,26 @@ const checkRepos = () => (dispatch) => {
     });
 };
 
+const getRepo = (id) => (dispatch) => {
+  // ?page=${page}
+  dispatch({ type: REPO_PROGRESS });
+  axios
+    .get(`/api/repositories/${id}`)
+    .then((response) => {
+      if (response.status === 200) {
+        dispatch({ type: REPO_SUCCESS, repository: response.data });
+      }
+      return null;
+    })
+    .catch((error) => {
+      dispatch({ type: REPO_FAIL, error: error.response.data });
+    });
+};
+
 const repoActions = {
   createRepo,
   checkRepos,
+  getRepo,
 };
 
 export default repoActions;

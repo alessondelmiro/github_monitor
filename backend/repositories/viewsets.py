@@ -1,6 +1,8 @@
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 from .models import Commit, Repository
 from .permissions import CreatePermission
@@ -9,9 +11,16 @@ from .util import create_repository, check_repos
 
 class RepositoryViewSet(ModelViewSet):
 
-    serializer_class = RepositorySerializer
-    def get_queryset(self):
-        return Repository.objects.filter(user=self.request.user)
+    def list(self, request):
+        queryset =  Repository.objects.filter(user=self.request.user)
+        serializer = RepositorySerializer(many=True, fields=('id', 'name', 'full_name', 'description', 'commit_count'))
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Repository.objects.filter(user=self.request.user)
+        repository = get_object_or_404(queryset, pk=pk)
+        serializer = RepositorySerializer(repository, context={'request': request})
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         return create_repository(self.request, serializer)

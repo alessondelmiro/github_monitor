@@ -1,10 +1,4 @@
-import {
-  CREATE_REPO_PROGRESS,
-  CREATE_REPO_SUCCESS,
-  CREATE_REPO_FAIL,
-  HAS_REPOS,
-  NO_REPOS,
-} from '../types';
+import { REPO_PROGRESS, REPO_SUCCESS, REPO_FAIL, HAS_REPOS, NO_REPOS } from '../types';
 
 const initialState = {
   loading: false,
@@ -18,12 +12,12 @@ const initialState = {
 // eslint-disable-next-line default-param-last
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_REPO_PROGRESS:
+    case REPO_PROGRESS:
       return {
         ...state,
         loading: true,
       };
-    case CREATE_REPO_SUCCESS:
+    case REPO_SUCCESS:
       return {
         loading: false,
         error: null,
@@ -32,7 +26,7 @@ const reducer = (state = initialState, action) => {
         alertMsg: action.alertMsg,
         hasRepos: true,
       };
-    case CREATE_REPO_FAIL:
+    case REPO_FAIL:
       return {
         loading: false,
         error: action.error,

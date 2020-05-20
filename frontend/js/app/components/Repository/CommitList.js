@@ -2,6 +2,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap/';
+import { Link } from 'react-router-dom';
 
 const CommitList = ({ detail, commits, loading }) => {
   return (
@@ -49,7 +50,13 @@ const CommitList = ({ detail, commits, loading }) => {
                       <span>{commit.message}</span>
                     </OverlayTrigger>
                   </td>
-                  {detail ? null : <td>{commit.repository_name}</td>}
+                  {detail ? null : (
+                    <td>
+                      <Link to={`repositories/${commit.repository_id}`}>
+                        {commit.repository_name}
+                      </Link>
+                    </td>
+                  )}
                   <td>{moment(commit.created).format('ll')}</td>
                 </tr>
               ))}

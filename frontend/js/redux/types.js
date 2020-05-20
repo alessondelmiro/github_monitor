@@ -2,9 +2,9 @@ export const AUTH_CHECKING = 'AUTH_CHECKING';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAIL = 'AUTH_FAIL';
 
-export const CREATE_REPO_PROGRESS = 'CREATE_REPO_PROGRESS';
-export const CREATE_REPO_SUCCESS = 'CREATE_REPO_SUCCESS';
-export const CREATE_REPO_FAIL = 'CREATE_REPO_FAIL';
+export const REPO_PROGRESS = 'REPO_PROGRESS';
+export const REPO_SUCCESS = 'REPO_SUCCESS';
+export const REPO_FAIL = 'REPO_FAIL';
 export const HAS_REPOS = 'HAS_REPOS';
 export const NO_REPOS = 'NO_REPOS';
 
