@@ -4,7 +4,7 @@ import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap/';
 import { Link } from 'react-router-dom';
 
-const CommitList = ({ detail, commits, loading }) => {
+const CommitList = ({ detail, commits, loading, showMore, hasNext }) => {
   return (
     <div className="list-container">
       {loading ? (
@@ -62,6 +62,13 @@ const CommitList = ({ detail, commits, loading }) => {
               ))}
             </tbody>
           </table>
+          {hasNext ? (
+            <div className="show-more">
+              <button className="btn btn-sm btn-secondary" type="button" onClick={showMore}>
+                Show more
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : (
         <div className="d-flex flex-column align-items-center">
@@ -73,10 +80,16 @@ const CommitList = ({ detail, commits, loading }) => {
   );
 };
 
+CommitList.defaultProps = {
+  detail: true,
+};
+
 CommitList.propTypes = {
   detail: PropTypes.bool,
   commits: PropTypes.array,
   loading: PropTypes.bool,
+  showMore: PropTypes.func,
+  hasNext: PropTypes.bool,
 };
 
 export default CommitList;

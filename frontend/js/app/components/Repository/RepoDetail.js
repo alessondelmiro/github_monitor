@@ -1,41 +1,72 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import actions from '../../../redux/actions';
 import Header from '../Common/Header';
 
-const RepoDetail = ({ getRepo, repository, match, loading }) => {
+import CommitList from './CommitList';
+
+const RepoDetail = ({ getRepo, getCommits, repository, match, loading, commits, hasNext }) => {
+  let page = 1;
   const { id } = match.params;
 
-  console.log('repository', repository);
   useEffect(() => {
     getRepo(id);
   }, []);
 
+  const showMore = () => {
+    if (hasNext) {
+      page += 1;
+      getCommits(page, id);
+    }
+  };
+
   return (
     <div>
       <Header />
-      <div className="search-container">
-        {loading ? (
+      <div className="back">
+        <Link to="/#">
+          <span> ← Back</span>
+        </Link>
+      </div>
+      {loading ? (
+        <div className="search-container">
           <div className="centered fit-width">
             <div className="spinner-border" role="status">
               <span className="sr-only">Loading...</span>
             </div>
           </div>
-        ) : (
-          <div>
-            <h4 className="title">{repository ? repository.name : null}</h4>
+        </div>
+      ) : (
+        <>
+          <div className="search-container">
+            <div className="detail-head">
+              <h3 className="title">
+                / <strong>{repository ? repository.name : null}</strong>
+              </h3>
+              <h6 className="title">
+                <strong>{repository ? repository.commit_count : null}</strong> commits{' '}
+              </h6>
+            </div>
+            <div>
+              <p className="description"> {repository ? repository.description : null} </p>
+            </div>
           </div>
-        )}
-      </div>
+          <CommitList commits={commits} hasNext={hasNext} showMore={showMore} />
+        </>
+      )}
     </div>
   );
 };
 
 RepoDetail.propTypes = {
   getRepo: PropTypes.func,
+  getCommits: PropTypes.func,
   repository: PropTypes.object,
+  commits: PropTypes.array,
+  hasNext: PropTypes.bool,
   match: PropTypes.object,
   loading: PropTypes.bool,
 };
@@ -43,6 +74,8 @@ RepoDetail.propTypes = {
 const mapStateToProps = (state) => {
   return {
     repository: state.repo.repository,
+    commits: state.repo.commits,
+    hasNext: state.repo.hasNext,
     loading: state.repo.loading,
   };
 };

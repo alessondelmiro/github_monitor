@@ -13,7 +13,7 @@ class CommitSerializer(ModelSerializer):
         model = Commit
         fields = (
             'sha', 'url', 'author', 'message', 'created',
-            'repository_name', 'repository_id'
+            'repository_name', 'repository_id',
         )
         read_only_fields = ('sha', 'url', 'author',)
 

@@ -1,12 +1,27 @@
-import { REPO_PROGRESS, REPO_SUCCESS, REPO_FAIL, HAS_REPOS, NO_REPOS } from '../types';
+import {
+  REPO_PROGRESS,
+  CREATE_REPO_SUCCESS,
+  CREATE_REPO_FAIL,
+  GET_REPO_SUCCESS,
+  GET_REPO_FAIL,
+  COMMITS_PROGRESS,
+  GET_COMMITS_SUCCESS,
+  GET_COMMITS_FAIL,
+  HAS_REPOS,
+  NO_REPOS,
+} from '../types';
 
 const initialState = {
   loading: false,
   error: null,
   repository: null,
+  newRepo: false,
   success: null,
   hasRepos: false,
   alertMsg: null,
+  commits: [],
+  hasNext: true,
+  loadingCommits: false,
 };
 
 // eslint-disable-next-line default-param-last
@@ -17,23 +32,70 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: true,
       };
-    case REPO_SUCCESS:
+    case COMMITS_PROGRESS:
       return {
+        ...state,
+        loadingCommits: true,
+      };
+    case CREATE_REPO_SUCCESS:
+      return {
+        ...state,
         loading: false,
         error: null,
-        repository: action.repository,
+        newRepo: action.repository,
         success: action.success,
         alertMsg: action.alertMsg,
         hasRepos: true,
       };
-    case REPO_FAIL:
+    case CREATE_REPO_FAIL:
       return {
+        ...state,
         loading: false,
         error: action.error,
-        repository: null,
+        newRepo: false,
         success: null,
         alertMsg: action.alertMsg,
         hasRepos: true,
+      };
+    case GET_REPO_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        newRepo: false,
+        repository: action.repository,
+        commits: action.commits,
+        success: action.success,
+        alertMsg: action.alertMsg,
+        hasNext: true,
+      };
+    case GET_REPO_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+        newRepo: false,
+        repository: null,
+        commits: [],
+        success: null,
+        alertMsg: action.alertMsg,
+        hasNext: true,
+      };
+    case GET_COMMITS_SUCCESS:
+      return {
+        ...state,
+        loadingCommits: false,
+        error: null,
+        commits: action.reset ? action.commits : [...state.commits, ...action.commits],
+        hasNext: action.hasNext,
+      };
+    case GET_COMMITS_FAIL:
+      return {
+        ...state,
+        loadingCommits: false,
+        error: action.error,
+        commits: [],
+        hasNext: true,
       };
     case HAS_REPOS:
       return {

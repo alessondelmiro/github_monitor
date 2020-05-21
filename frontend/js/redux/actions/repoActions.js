@@ -1,13 +1,24 @@
 import axios from 'axios';
 import moment from 'moment';
 
-import { REPO_PROGRESS, REPO_SUCCESS, REPO_FAIL, HAS_REPOS, NO_REPOS } from '../types';
+import {
+  REPO_PROGRESS,
+  CREATE_REPO_SUCCESS,
+  CREATE_REPO_FAIL,
+  GET_REPO_SUCCESS,
+  GET_REPO_FAIL,
+  COMMITS_PROGRESS,
+  GET_COMMITS_SUCCESS,
+  GET_COMMITS_FAIL,
+  HAS_REPOS,
+  NO_REPOS,
+} from '../types';
 
 const createRepo = (name) => (dispatch) => {
   dispatch({ type: REPO_PROGRESS });
   if (!name.includes('/')) {
     dispatch({
-      type: REPO_FAIL,
+      type: CREATE_REPO_FAIL,
       error: { detail: 'Wrong format. Example: username/repo_name', created: moment() },
     });
     return null;
@@ -26,8 +37,8 @@ const createRepo = (name) => (dispatch) => {
           };
         }
         dispatch({
-          type: REPO_SUCCESS,
-          repository: response.data,
+          type: CREATE_REPO_SUCCESS,
+          newRepo: true,
           alertMsg,
           success: { detail: `Repository ${response.data.name} added`, created: moment() },
         });
@@ -35,7 +46,7 @@ const createRepo = (name) => (dispatch) => {
       return null;
     })
     .catch((error) => {
-      dispatch({ type: REPO_FAIL, error: error.response.data });
+      dispatch({ type: CREATE_REPO_FAIL, error: error.response.data });
     });
   return null;
 };
@@ -56,18 +67,44 @@ const checkRepos = () => (dispatch) => {
 };
 
 const getRepo = (id) => (dispatch) => {
-  // ?page=${page}
   dispatch({ type: REPO_PROGRESS });
   axios
     .get(`/api/repositories/${id}`)
     .then((response) => {
       if (response.status === 200) {
-        dispatch({ type: REPO_SUCCESS, repository: response.data });
+        dispatch({
+          type: GET_REPO_SUCCESS,
+          repository: response.data,
+          commits: response.data.commit_set,
+        });
       }
       return null;
     })
     .catch((error) => {
-      dispatch({ type: REPO_FAIL, error: error.response.data });
+      dispatch({ type: GET_REPO_FAIL, error: error.response.data });
+    });
+};
+
+const getCommits = (page, repositoryId) => (dispatch) => {
+  dispatch({ type: COMMITS_PROGRESS });
+  const uri = repositoryId
+    ? `/api/commits/?repository__id=${repositoryId}&page=${page}`
+    : `/api/commits/?page=${page}`;
+  axios
+    .get(uri)
+    .then((response) => {
+      if (response.status === 200) {
+        dispatch({
+          type: GET_COMMITS_SUCCESS,
+          commits: response.data.results,
+          reset: page === 1,
+          hasNext: response.data.next !== null,
+        });
+      }
+      return null;
+    })
+    .catch((error) => {
+      dispatch({ type: GET_COMMITS_FAIL, error: error.response.data });
     });
 };
 
@@ -75,6 +112,7 @@ const repoActions = {
   createRepo,
   checkRepos,
   getRepo,
+  getCommits,
 };
 
 export default repoActions;

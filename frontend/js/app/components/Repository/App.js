@@ -12,7 +12,8 @@ const App = ({
   createRepo,
   getCommits,
   commits,
-  repository,
+  hasNext,
+  newRepo,
   error,
   success,
   alertMsg,
@@ -21,25 +22,40 @@ const App = ({
   hasRepos,
   checkRepos,
 }) => {
+  let page = 1;
   const [text, setText] = useState('');
   const submitForm = (e) => {
     e.preventDefault();
     createRepo(text);
   };
 
+  const showMore = () => {
+    if (hasNext) {
+      page += 1;
+      getCommits(page);
+    }
+  };
+
   useEffect(() => {
     checkRepos();
-    getCommits();
+    getCommits(page);
   }, []);
 
   useEffect(() => {
-    checkRepos();
-    getCommits();
-  }, [repository]);
+    if (newRepo) {
+      checkRepos();
+      getCommits(1);
+    }
+  }, [newRepo]);
+
+  const user = {
+    username: 'alessondelmiro',
+    avatar: 'https://avatars1.githubusercontent.com/u/11700906?v=4',
+  };
 
   return (
     <div>
-      <Header />
+      <Header user={user} />
       <AddRepo
         alertMsg={alertMsg}
         error={error}
@@ -57,7 +73,13 @@ const App = ({
           </div>
         </div>
       ) : hasRepos ? (
-        <CommitList commits={commits} detail={false} loading={loadingCommits} />
+        <CommitList
+          commits={commits}
+          detail={false}
+          hasNext={hasNext}
+          loading={loadingCommits}
+          showMore={showMore}
+        />
       ) : (
         <div className="search-container d-flex justify-content-center">
           <h4 className="title">Add your first repository</h4>
@@ -70,8 +92,9 @@ const App = ({
 App.propTypes = {
   createRepo: PropTypes.func,
   commits: PropTypes.array,
+  hasNext: PropTypes.bool,
   getCommits: PropTypes.func,
-  repository: PropTypes.object,
+  newRepo: PropTypes.bool,
   error: PropTypes.object,
   success: PropTypes.object,
   alertMsg: PropTypes.object,
@@ -86,11 +109,12 @@ const mapStateToProps = (state) => {
     error: state.repo.error,
     alertMsg: state.repo.alertMsg,
     loading: state.repo.loading,
-    repository: state.repo.repository,
+    newRepo: state.repo.newRepo,
     success: state.repo.success,
     hasRepos: state.repo.hasRepos,
-    commits: state.commit.commits,
-    loadingCommits: state.commit.loading,
+    commits: state.repo.commits,
+    hasNext: state.repo.hasNext,
+    loadingCommits: state.repo.loadingCommits,
   };
 };
 

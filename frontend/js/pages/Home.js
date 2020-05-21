@@ -9,6 +9,8 @@ import RepoDetail from '../app/components/Repository/RepoDetail';
 
 const Home = ({ authenticated, store }) => {
   if (authenticated) {
+    // window.location.replace('/#/');
+    // window.history.pushState({ urlPath: '/#/' }, '/#/', '/#/');
     return (
       <Provider store={store}>
         <HashRouter>
