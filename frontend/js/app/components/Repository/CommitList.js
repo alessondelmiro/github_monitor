@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const CommitList = ({ detail, commits, loading, showMore, hasNext }) => {
   return (
     <div className="list-container">
-      {loading ? (
+      {loading && (!commits || commits.length === 0) ? (
         <div className="centered fit-width">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
@@ -37,11 +37,11 @@ const CommitList = ({ detail, commits, loading, showMore, hasNext }) => {
             </thead>
             <tbody>
               {commits.map((commit) => (
-                <tr key={commit.sha.slice(0, 6)}>
+                <tr key={commit.sha.slice(0, 7)}>
                   <th className="author-row" scope="row">
                     {commit.author.name}
                   </th>
-                  <td>{commit.sha.slice(0, 6)}</td>
+                  <td>{commit.sha.slice(0, 7)}</td>
                   <td className="message-col">
                     <OverlayTrigger
                       key={commit.message}

@@ -6,7 +6,10 @@ import json
 
 from .models import User
 from django.template import loader
+from rest_framework.exceptions import NotFound
 from django.http import HttpResponse, HttpResponseNotFound
+from .serializers import UserSerializer
+from rest_framework.response import Response
 
 GITHUB_CLIENT_ID = config("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = config("GITHUB_CLIENT_SECRET")
@@ -78,8 +81,11 @@ def verify_token(req):
                 user.username = json_data['login']
                 user.avatar = json_data['avatar_url']
                 user.save()
-                return HttpResponse(status=204)
+                serializer = UserSerializer(user)
         except User.DoesNotExist:
-            pass
+            raise NotFound(
+            detail="User not found",
+            code=http.HTTPStatus.NOT_FOUND
+        )
 
-    return HttpResponse(status=404)
+    return Response(serializer.data)

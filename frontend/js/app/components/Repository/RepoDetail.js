@@ -8,7 +8,16 @@ import Header from '../Common/Header';
 
 import CommitList from './CommitList';
 
-const RepoDetail = ({ getRepo, getCommits, repository, match, loading, commits, hasNext }) => {
+const RepoDetail = ({
+  getRepo,
+  getCommits,
+  repository,
+  match,
+  loading,
+  commits,
+  hasNext,
+  user,
+}) => {
   let page = 1;
   const { id } = match.params;
 
@@ -25,7 +34,7 @@ const RepoDetail = ({ getRepo, getCommits, repository, match, loading, commits, 
 
   return (
     <div>
-      <Header />
+      <Header user={user} />
       <div className="back">
         <Link to="/#">
           <span> ← Back</span>
@@ -69,6 +78,7 @@ RepoDetail.propTypes = {
   hasNext: PropTypes.bool,
   match: PropTypes.object,
   loading: PropTypes.bool,
+  user: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
@@ -77,6 +87,7 @@ const mapStateToProps = (state) => {
     commits: state.repo.commits,
     hasNext: state.repo.hasNext,
     loading: state.repo.loading,
+    user: state.auth.user,
   };
 };
 

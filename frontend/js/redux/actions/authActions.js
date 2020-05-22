@@ -12,9 +12,9 @@ const checkUser = (token) => {
       dispatch({ type: AUTH_CHECKING });
       try {
         const response = await axios.get(`/api/verify?token=${token}`);
-        if (response.status === 204) {
+        if (response.status === 200) {
           await setToken(token);
-          dispatch({ type: AUTH_SUCCESS });
+          dispatch({ type: AUTH_SUCCESS, user: response.data });
           return true;
         }
         dispatch({

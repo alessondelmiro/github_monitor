@@ -1,4 +1,3 @@
-from .models import Repository
 from rest_framework.serializers import ModelSerializer, StringRelatedField, PrimaryKeyRelatedField, SerializerMethodField
 from common.serializers import DynamicFieldsModelSerializer
 from .models import Commit, Repository

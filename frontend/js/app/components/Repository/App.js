@@ -21,7 +21,9 @@ const App = ({
   loadingCommits,
   hasRepos,
   checkRepos,
+  user,
 }) => {
+  window.location.replace('/#/');
   let page = 1;
   const [text, setText] = useState('');
   const submitForm = (e) => {
@@ -47,11 +49,6 @@ const App = ({
       getCommits(1);
     }
   }, [newRepo]);
-
-  const user = {
-    username: 'alessondelmiro',
-    avatar: 'https://avatars1.githubusercontent.com/u/11700906?v=4',
-  };
 
   return (
     <div>
@@ -102,6 +99,7 @@ App.propTypes = {
   loadingCommits: PropTypes.bool,
   hasRepos: PropTypes.bool,
   checkRepos: PropTypes.func,
+  user: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
@@ -115,6 +113,7 @@ const mapStateToProps = (state) => {
     commits: state.repo.commits,
     hasNext: state.repo.hasNext,
     loadingCommits: state.repo.loadingCommits,
+    user: state.auth.user,
   };
 };
 
