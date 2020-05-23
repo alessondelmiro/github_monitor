@@ -1,6 +1,6 @@
 from django.core import management
 
-from github_monit.celery import celery_app
+from github_monit.celery import app
 
 
 @app.task
