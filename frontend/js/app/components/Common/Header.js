@@ -20,9 +20,7 @@ const Header = ({ user }) => {
   // TODO: FIX RELOAD AND LOGOUT PROBLEM
   const logout = () => {
     localStorage.clear();
-    // window.location.replace('/#/login');
-    window.history.pushState({ urlPath: '/#/login' }, '/#', '/#/login');
-    window.location.reload();
+    window.location.replace('/login');
   };
 
   return (

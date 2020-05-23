@@ -12,6 +12,8 @@ from .util import create_repository, check_repos
 
 class RepositoryViewSet(ModelViewSet):
 
+    serializer_class = RepositorySerializer
+
     def list(self, request):
         queryset =  Repository.objects.filter(user=self.request.user)
         serializer = RepositorySerializer(many=True, fields=('id', 'name', 'full_name', 'description', 'commit_count'))

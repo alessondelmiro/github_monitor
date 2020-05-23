@@ -52,7 +52,7 @@ const CommitList = ({ detail, commits, loading, showMore, hasNext }) => {
                   </td>
                   {detail ? null : (
                     <td>
-                      <Link to={`repositories/${commit.repository_id}`}>
+                      <Link to={`repository/${commit.repository_id}`}>
                         {commit.repository_name}
                       </Link>
                     </td>

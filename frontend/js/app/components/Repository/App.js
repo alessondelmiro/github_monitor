@@ -23,7 +23,6 @@ const App = ({
   checkRepos,
   user,
 }) => {
-  window.location.replace('/#/');
   let page = 1;
   const [text, setText] = useState('');
   const submitForm = (e) => {

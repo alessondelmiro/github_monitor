@@ -36,7 +36,7 @@ const RepoDetail = ({
     <div>
       <Header user={user} />
       <div className="back">
-        <Link to="/#">
+        <Link to="/">
           <span> ← Back</span>
         </Link>
       </div>
@@ -56,7 +56,8 @@ const RepoDetail = ({
                 / <strong>{repository ? repository.name : null}</strong>
               </h3>
               <h6 className="title">
-                <strong>{repository ? repository.commit_count : null}</strong> commits{' '}
+                <strong>{repository ? repository.commit_count : null}</strong>
+                {repository && repository.commit_count === 1 ? ' commit' : ' commits'}
               </h6>
             </div>
             <div>

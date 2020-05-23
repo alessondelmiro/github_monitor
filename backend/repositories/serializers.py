@@ -3,6 +3,8 @@ from common.serializers import DynamicFieldsModelSerializer
 from .models import Commit, Repository
 from django.core.paginator import Paginator
 
+from rest_framework.pagination import PageNumberPagination
+
 class CommitSerializer(ModelSerializer):
 
     repository_name = StringRelatedField(source='repository', read_only=True)
@@ -16,9 +18,18 @@ class CommitSerializer(ModelSerializer):
         )
         read_only_fields = ('sha', 'url', 'author',)
 
+class RelationPaginator(PageNumberPagination):
+    def get_paginated_response(self, data):
+        return {
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'count': self.page.paginator.count,
+            'results': data
+        }
+
+
 class RepositorySerializer(DynamicFieldsModelSerializer):
 
-    commit_set = SerializerMethodField('paginated_commitinrepository')
     class Meta:
         model = Repository
         fields = (
@@ -26,13 +37,22 @@ class RepositorySerializer(DynamicFieldsModelSerializer):
         )
         read_only_fields = ('id', 'fullname', 'description', 'commit_count', 'commit_set')
 
-    def paginated_commitinrepository(self, obj):
-        commits = Commit.objects.filter(repository=obj).order_by('-created')
-        page_size = self.context['request'].query_params.get('size', None) or 10
-        paginator = Paginator(commits, page_size)
-        page = self.context['request'].query_params.get('page', None) or 1
+    commit_set = SerializerMethodField()
+    def get_commit_set(self, obj):
+        queryset = obj.commit_set.all()
 
-        commits_in_repository = paginator.page(page)
-        serializer = CommitSerializer(commits_in_repository, many=True)
-        return serializer.data
+        request = self.context.get('request')
+
+        serializer = CommitSerializer(
+            queryset, many=True,
+            context={'request': request})
+
+        paginator = RelationPaginator()
+
+        paginated_data = paginator.paginate_queryset(
+            queryset=serializer.data, request=request)
+
+        result = paginator.get_paginated_response(paginated_data)
+
+        return result
 

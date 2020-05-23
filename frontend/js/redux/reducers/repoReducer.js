@@ -42,7 +42,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: null,
-        newRepo: action.repository,
+        newRepo: true,
         success: action.success,
         alertMsg: action.alertMsg,
         hasRepos: true,
@@ -55,7 +55,7 @@ const reducer = (state = initialState, action) => {
         newRepo: false,
         success: null,
         alertMsg: action.alertMsg,
-        hasRepos: true,
+        hasRepos: false,
       };
     case GET_REPO_SUCCESS:
       return {
@@ -67,7 +67,7 @@ const reducer = (state = initialState, action) => {
         commits: action.commits,
         success: action.success,
         alertMsg: action.alertMsg,
-        hasNext: true,
+        hasNext: action.hasNext,
       };
     case GET_REPO_FAIL:
       return {
@@ -101,11 +101,15 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         hasRepos: true,
+        newRepo: false,
+        loading: false,
       };
     case NO_REPOS:
       return {
         ...state,
         hasRepos: false,
+        newRepo: false,
+        loading: false,
       };
     default:
       return state;

@@ -38,7 +38,6 @@ const createRepo = (name) => (dispatch) => {
         }
         dispatch({
           type: CREATE_REPO_SUCCESS,
-          newRepo: true,
           alertMsg,
           success: { detail: `Repository ${response.data.name} added`, created: moment() },
         });
@@ -46,12 +45,21 @@ const createRepo = (name) => (dispatch) => {
       return null;
     })
     .catch((error) => {
+      if (error.response.status === 500) {
+        dispatch({
+          type: CREATE_REPO_FAIL,
+          error: { detail: 'Internal server error', created: moment() },
+        });
+        return null;
+      }
       dispatch({ type: CREATE_REPO_FAIL, error: error.response.data });
+      return null;
     });
   return null;
 };
 
 const checkRepos = () => (dispatch) => {
+  dispatch({ type: REPO_PROGRESS });
   axios
     .get('api/repositories/check')
     .then((response) => {
@@ -75,7 +83,8 @@ const getRepo = (id) => (dispatch) => {
         dispatch({
           type: GET_REPO_SUCCESS,
           repository: response.data,
-          commits: response.data.commit_set,
+          commits: response.data.commit_set.results,
+          hasNext: response.data.commit_set.next !== null,
         });
       }
       return null;
