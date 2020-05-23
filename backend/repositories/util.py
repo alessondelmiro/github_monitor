@@ -136,10 +136,6 @@ def check_repos(req):
 
     return HttpResponseNotFound()
 
-def commit_hook_check(req):
-    print(req)
-    return HttpResponse(status=204)
-
 @app.task(autoretry_for=(RequestException,), default_retry_delay=15 * 60,
           retry_kwargs={'max_retries': 4})
 def create_repo_hook(repository_id):

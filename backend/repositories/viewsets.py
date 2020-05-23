@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from .models import Commit, Repository
 from .permissions import CreatePermission
 from .serializers import RepositorySerializer, CommitSerializer
-from .util import create_repository, check_repos, create_commit, commit_hook_check
+from .util import create_repository, check_repos, create_commit
 class RepositoryViewSet(ModelViewSet):
 
     serializer_class = RepositorySerializer
@@ -43,7 +43,3 @@ class CommitViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         return create_commit(request)
-
-    @action(detail=False)
-    def commit_hook(self, request):
-        return commit_hook_check(request)
