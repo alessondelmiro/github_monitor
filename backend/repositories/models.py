@@ -8,6 +8,7 @@ class Repository(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     github_id = models.IntegerField(unique=True)
+    github_hook_id = models.IntegerField(unique=True, null=True)
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255, null=True)
     url = models.CharField(max_length=255)
@@ -34,3 +35,15 @@ class Commit (models.Model):
     created = models.DateTimeField(default=datetime.now, blank=True)
     author = JSONField()
     message = models.TextField(blank=True)
+
+    # def serialize_hook(self, hook):
+    #     return {
+    #         'hook': hook.dict(),
+    #         'data': {
+    #             'sha': self.sha,
+    #             'url': self.url,
+    #             'created': self.created,
+    #             'author': self.author,
+    #             'message': self.message,
+    #         }
+    #     }

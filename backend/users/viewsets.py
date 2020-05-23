@@ -4,10 +4,12 @@ from rest_framework.viewsets import ModelViewSet
 from .models import User
 
 from .util import github_callback, verify_token
+from users.serializers import UserSerializer
 
 class UserViewSet(ModelViewSet):
 
     queryset = User.objects.all()
+    serializer_class = UserSerializer
 
     def get_permissions(self):
         permission_classes = (IsAuthenticated,) if self.action == "get_commits" else (AllowAny,)

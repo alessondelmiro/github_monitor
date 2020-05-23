@@ -14,7 +14,7 @@ from rest_framework.response import Response
 GITHUB_CLIENT_ID = config("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = config("GITHUB_CLIENT_SECRET")
 GITHUB_ACCESS_URL = config("GITHUB_ACCESS_URL")
-GITHUB_USER_URL = config("GITHUB_USER_URL")
+GITHUB_URL = config("GITHUB_URL")
 
 def github_callback(req):
     code = req.GET.get('code', None)
@@ -31,7 +31,7 @@ def github_callback(req):
         if token:
             token = token[0]
             request = requests.get(
-                GITHUB_USER_URL,
+                GITHUB_URL + '/user',
                 headers={
                     'Accept': 'application/vnd.github.v3+json',
                     'Authorization': f'token {token}',
@@ -68,7 +68,7 @@ def verify_token(req):
     if token:
         try:
             request = requests.get(
-                GITHUB_USER_URL,
+                GITHUB_URL + '/user',
                 headers={
                     'Accept': 'application/vnd.github.v3+json',
                     'Authorization': f'token {token}',

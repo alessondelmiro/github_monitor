@@ -17,7 +17,6 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 ));
 
 const Header = ({ user }) => {
-  // TODO: FIX RELOAD AND LOGOUT PROBLEM
   const logout = () => {
     localStorage.clear();
     window.location.replace('/login');

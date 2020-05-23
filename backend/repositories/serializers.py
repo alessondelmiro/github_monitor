@@ -33,9 +33,9 @@ class RepositorySerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Repository
         fields = (
-            'id', 'name', 'full_name', 'description', 'commit_count', 'commit_set',
+            'id', 'name', 'full_name', 'description', 'commit_count', 'commit_set', 'github_hook_id'
         )
-        read_only_fields = ('id', 'fullname', 'description', 'commit_count', 'commit_set')
+        read_only_fields = ('id', 'fullname', 'description', 'commit_count', 'commit_set', 'github_hook_id')
 
     commit_set = SerializerMethodField()
     def get_commit_set(self, obj):
