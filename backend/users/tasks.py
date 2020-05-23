@@ -1,8 +1,8 @@
 from django.core import management
 
-from github_monit import celery_app
+from github_monit.celery import celery_app
 
 
-@celery_app.task
+@app.task
 def clearsessions():
     management.call_command('clearsessions')
