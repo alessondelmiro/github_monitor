@@ -145,7 +145,7 @@ def create_repo_hook(repository_id):
         return
 
     request = requests.post(
-        f'https://api.github.com/repos/{repository.full_name}/hooks',
+        GITHUB_URL + f'/repos/{repository.full_name}/hooks',
         headers={
             'Authorization': f'token {repository.user.github_token}',
             'Accept': 'application/vnd.github.v3+json'
