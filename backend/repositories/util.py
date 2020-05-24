@@ -96,8 +96,6 @@ def create_commit(request):
             }
     }
 
-    requests.post(url=APP_URL + f'/commit_hook', data=webhook_data)
-
     return HttpResponse(status=http.HTTPStatus.NO_CONTENT)
 
 def get_repo_commits(repository_id):
@@ -156,7 +154,7 @@ def create_repo_hook(repository_id):
                 'push'
             ],
             'config': {
-                'url': f'{APP_URL}/commits/'
+                'url': f'{APP_URL}/api/commits/'
             }
         }
     )

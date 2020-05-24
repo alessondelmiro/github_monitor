@@ -39,7 +39,10 @@ const createRepo = (name) => (dispatch) => {
         dispatch({
           type: CREATE_REPO_SUCCESS,
           alertMsg,
-          success: { detail: `Repository ${response.data.name} added`, created: moment() },
+          success: {
+            detail: `Repository ${response.data.name} added, everything you push will appear here.`,
+            created: moment(),
+          },
         });
       }
       return null;
