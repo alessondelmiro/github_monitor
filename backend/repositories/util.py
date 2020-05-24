@@ -1,21 +1,18 @@
-import requests
-from decouple import config
-import re
 import http
 import json
+import requests
+
+from decouple import config
 
 from .models import Repository, Commit
-from django.template import loader
-from django.http import HttpResponse, HttpResponseNotFound
+from .tasks import get_repo_commits, create_repo_hook
+
 from django.db import IntegrityError
+from django.http import HttpResponse, HttpResponseNotFound
+
 from rest_framework.exceptions import NotFound
-from django.core.exceptions import ObjectDoesNotExist
-import datetime
-from github_monit.celery import app
-from requests.exceptions import RequestException
 
 GITHUB_URL = config("GITHUB_URL")
-APP_URL = config("APP_URL")
 
 def create_repository(req, serializer):
     request = requests.get(
@@ -88,72 +85,8 @@ def create_commit(request):
 
     return HttpResponse(status=http.HTTPStatus.NO_CONTENT)
 
-def get_repo_commits(repository_id):
-    try:
-        repository = Repository.objects.select_related().get(id=repository_id)
-    except ObjectDoesNotExist:
-        return
-
-    since = (datetime.date.today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d')
-
-    request = requests.get(
-        GITHUB_URL + f'/repos/{repository.full_name}/commits?since={since}',
-        headers={
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': f'token {repository.user.github_token}',
-        },
-    )
-    if request.status_code == http.HTTPStatus.OK:
-        json_data = json.loads(request.text)
-        for item in json_data:
-            try:
-                commit = Commit.objects.create(
-                    repository = repository,
-                    sha = item["sha"],
-                    url = item["html_url"],
-                    created = item["commit"]["committer"]["date"],
-                    author = item["commit"]["author"],
-                    message = item["commit"]["message"],
-                )
-            except (TypeError, IntegrityError):
-                pass
-
 def check_repos(req):
     if Repository.objects.filter(user=req.user):
         return HttpResponse(status=204)
 
     return HttpResponseNotFound()
-
-@app.task(autoretry_for=(RequestException,), default_retry_delay=15 * 60,
-          retry_kwargs={'max_retries': 4})
-def create_repo_hook(repository_id):
-    try:
-        repository = Repository.objects.select_related().get(id=repository_id)
-    except ObjectDoesNotExist:
-        return
-
-    request = requests.post(
-        GITHUB_URL + f'/repos/{repository.full_name}/hooks',
-        headers={
-            'Authorization': f'token {repository.user.github_token}',
-            'Accept': 'application/vnd.github.v3+json'
-        },
-        json={
-            'name': 'web',
-            'events': [
-                'push'
-            ],
-            'config': {
-                'url': f'{APP_URL}/api/commits/'
-            }
-        }
-    )
-
-    if request.status_code == http.HTTPStatus.FORBIDDEN:
-        return
-
-    if request.status_code != http.HTTPStatus.CREATED:
-        raise RequestException
-
-    json_data = json.loads(request.text)
-    Repository.objects.filter(id=repository_id).update(github_hook_id=json_data['id'])
