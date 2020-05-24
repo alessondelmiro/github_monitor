@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ const RepoDetail = ({
   hasNext,
   user,
 }) => {
-  let page = 1;
+  const [page, setPage] = useState(1);
   const { id } = match.params;
 
   useEffect(() => {
@@ -27,10 +27,15 @@ const RepoDetail = ({
 
   const showMore = () => {
     if (hasNext) {
-      page += 1;
-      getCommits(page, id);
+      setPage(page + 1);
     }
   };
+
+  useEffect(() => {
+    if (hasNext) {
+      getCommits(page);
+    }
+  }, [page]);
 
   return (
     <div>

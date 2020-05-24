@@ -23,7 +23,7 @@ const App = ({
   checkRepos,
   user,
 }) => {
-  let page = 1;
+  const [page, setPage] = useState(1);
   const [text, setText] = useState('');
   const submitForm = (e) => {
     e.preventDefault();
@@ -32,10 +32,15 @@ const App = ({
 
   const showMore = () => {
     if (hasNext) {
-      page += 1;
-      getCommits(page);
+      setPage(page + 1);
     }
   };
+
+  useEffect(() => {
+    if (hasNext) {
+      getCommits(page);
+    }
+  }, [page]);
 
   useEffect(() => {
     checkRepos();

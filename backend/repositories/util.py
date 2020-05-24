@@ -86,16 +86,6 @@ def create_commit(request):
         except IntegrityError:
             return HttpResponse(status=http.HTTPStatus.UNPROCESSABLE_ENTITY)
 
-    webhook_data = {
-            'data': {
-                'sha': commit.sha,
-                'url': commit.url,
-                'created': commit.created,
-                'author': commit.author,
-                'message': commit.message,
-            }
-    }
-
     return HttpResponse(status=http.HTTPStatus.NO_CONTENT)
 
 def get_repo_commits(repository_id):
