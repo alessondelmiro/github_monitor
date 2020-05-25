@@ -1,5 +1,8 @@
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap/';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -60,10 +63,34 @@ const RepoDetail = ({
               <h3 className="title">
                 / <strong>{repository ? repository.name : null}</strong>
               </h3>
-              <h6 className="title">
-                <strong>{repository ? repository.commit_count : null}</strong>
-                {repository && repository.commit_count === 1 ? ' commit' : ' commits'}
-              </h6>
+              <div>
+                {repository && repository.github_hook_id ? (
+                  <h6 className="title">
+                    <FontAwesomeIcon className="icon" icon={faCheck} />
+                    Synced with GitHub
+                  </h6>
+                ) : (
+                  <h6 className="title">
+                    <OverlayTrigger
+                      key="overlay-repo"
+                      overlay={
+                        <Tooltip id="tooltip-sync">
+                          We will retry to sync with GitHub in a few minutes.
+                        </Tooltip>
+                      }
+                    >
+                      <div>
+                        <FontAwesomeIcon className="icon" icon={faTimes} />
+                        Not synced with GitHub
+                      </div>
+                    </OverlayTrigger>
+                  </h6>
+                )}
+                <h6 className="title">
+                  <strong>{repository ? repository.commit_count : null}</strong>
+                  {repository && repository.commit_count === 1 ? ' commit' : ' commits'}
+                </h6>
+              </div>
             </div>
             <div>
               <p className="description"> {repository ? repository.description : null} </p>
