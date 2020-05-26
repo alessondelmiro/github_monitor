@@ -60,11 +60,27 @@ thead th {
   color: white;
 }
 
+.user-name-container {
+  @media (max-width: '375px') {
+    display: none;
+  }
+}
+
+.input-group input, button {
+  @media (max-width: '425px') {
+    font-size: 12px!important;
+  }
+}
+
 .detail-head {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 1%;
+  @media (max-width: '425px') {
+    flex-direction: column;
+    align-items: normal;
+  }
 }
 
 .detail-head h3 {
@@ -129,4 +145,14 @@ thead th {
   @media (max-width: '880px') {
     max-width: 300px;
   }
+}
+
+.summary-message {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary-infos {
+  font-size: 13px;
 }

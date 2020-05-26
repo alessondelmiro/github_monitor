@@ -29,7 +29,7 @@ const Header = ({ user }) => {
       </Link>
       {user ? (
         <div className="user-info">
-          <div>
+          <div className="user-name-container">
             <h6 className="user-name">{user.username}</h6>
           </div>
           <Dropdown>
